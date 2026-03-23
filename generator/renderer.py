@@ -39,9 +39,6 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
     else:
         font_size = int(width * 0.04)
 
-    try:
-        font = ImageFont.truetype("arial.ttf", font_size)
-    except:
         try:
             font = ImageFont.truetype(
                 "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
@@ -49,12 +46,13 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
             )
         except:
             font = ImageFont.load_default()
+            font_size = 30
 
     # ---------- DRAW QUOTE ----------
     if quote_style != "none":
 
         # Wrap text (better width control)
-        wrap_width = 25 if width < 1000 else 40
+        wrap_width = int(width / (font_size * 0.6))
         wrapped_text = textwrap.fill(quote, width=wrap_width)
         lines = wrapped_text.split("\n")
 
