@@ -8,8 +8,8 @@ from openai import OpenAI
 
 st.set_page_config(layout="centered")
 
-# ---------- OPENAI ----------
-client = OpenAI(api_key="YOUR_API_KEY_HERE")
+# -------- OPENAI --------
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # ---------- SESSION ----------
 if "history" not in st.session_state:
