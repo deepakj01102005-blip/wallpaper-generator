@@ -1,0 +1,61 @@
+# app.py — robust loader (replace entire file with this)
+import os
+import sys
+from importlib import util
+from datetime import datetime
+
+# Ensure project root is known
+proj_root = os.path.abspath(os.path.dirname(__file__))
+
+# Helper: import a module by path and return the module object
+def import_module_from_path(name, path):
+    spec = util.spec_from_file_location(name, path)
+    module = util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+# Load generator.personality and generator.renderer directly via file path
+personality_path = os.path.join(proj_root, "generator", "personality.py")
+renderer_path = os.path.join(proj_root, "generator", "renderer.py")
+
+if not os.path.exists(personality_path) or not os.path.exists(renderer_path):
+    raise FileNotFoundError("Required generator files not found. Ensure generator/personality.py and generator/renderer.py exist.")
+
+personality = import_module_from_path("generator.personality", personality_path)
+renderer = import_module_from_path("generator.renderer", renderer_path)
+
+# Expose the functions we need
+answers_to_theme = personality.answers_to_theme
+render_wallpaper = renderer.render_wallpaper
+
+# ---- Now Streamlit UI ----
+import streamlit as st
+
+st.set_page_config(page_title="Personality Wallpaper Generator", layout="centered")
+
+st.title("✨ Personality-Driven Wallpaper Generator")
+st.write("Default theme: **Dark + Misty + Minimal**")
+
+with st.form("quiz"):
+    st.subheader("Short personality quiz (just a few sliders)")
+    dream = st.slider("Do you like dreamy / ethereal aesthetics?", 1, 5, 4)
+    dark = st.slider("Do you prefer dark themes over bright?", 1, 5, 5)
+    cat = st.slider("Affinity for black cat (0 none → 5 love it)", 0, 5, 4)
+    kiwi = st.slider("Affinity for kiwi bird (0 none → 5 like it)", 0, 5, 1)
+    quote = st.text_input("Optional quote", value="In the mist, the animal heart and the dream mind align.")
+    submitted = st.form_submit_button("Generate Wallpaper")
+
+if submitted:
+    answers = {'dream': dream, 'dark': dark, 'cat': cat, 'kiwi': kiwi}
+    theme = answers_to_theme(answers)
+    st.markdown(f"**Theme:** {theme.name} — mist_strength={theme.mist_strength:.2f} — silhouette: {theme.silhouette or 'none'}")
+
+    with st.spinner("Rendering..."):
+        img = render_wallpaper(theme, size=(1080, 1920), quote=quote)
+        os.makedirs("output", exist_ok=True)
+        fname = f"output/wallpaper_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        img.save(fname, format='PNG')
+
+    st.image(img, width=350)
+    with open(fname, "rb") as f:
+        st.download_button("Download PNG", f, file_name=os.path.basename(fname), mime="image/png")
