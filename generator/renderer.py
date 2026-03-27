@@ -38,6 +38,7 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
     # ---------- FONT SIZE (FIXED BIG TEXT) ----------
     if len(quote) <= 25:
         font_size = int(width * 0.18)
+        print("font sie",font_size)
     elif len(quote) <= 60:
         font_size = int(width * 0.14)
     else:
