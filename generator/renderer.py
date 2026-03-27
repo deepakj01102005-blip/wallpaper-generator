@@ -35,15 +35,15 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
 
     draw = ImageDraw.Draw(image)
 
-    # ---------- FONT SIZE ----------
+    # ---------- FONT SIZE (FIXED BIG TEXT) ----------
     if len(quote) <= 25:
-        font_size = int(width * 0.12)
+        font_size = int(width * 0.18)
     elif len(quote) <= 60:
-        font_size = int(width * 0.10)
+        font_size = int(width * 0.14)
     else:
-        font_size = int(width * 0.08)
+        font_size = int(width * 0.12)
 
-    # ---------- LOAD FONT (NO ERRORS) ----------
+    # ---------- LOAD FONT ----------
     try:
         font = ImageFont.truetype(
             "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
@@ -57,15 +57,17 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
             )
         except:
             font = ImageFont.load_default()
-            font_size = 40  # fallback fix
 
     # ---------- DRAW QUOTE ----------
     if quote_style != "none":
 
-        # wrap text properly
-        wrap_width = 15 if width < 1000 else 25
-        wrapped_text = textwrap.fill(quote, width=wrap_width)
-        lines = wrapped_text.split("\n")
+        # 🔥 SMART WRAPPING (MAIN FIX)
+        if len(quote) <= 30:
+            lines = [quote]   # no wrapping → BIG text
+        else:
+            wrap_width = 40
+            wrapped_text = textwrap.fill(quote, width=wrap_width)
+            lines = wrapped_text.split("\n")
 
         # line height
         bbox = draw.textbbox((0, 0), "Ay", font=font)
@@ -98,7 +100,7 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
     # ---------- SAVE ----------
     os.makedirs(output_dir, exist_ok=True)
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
     output_path = os.path.join(output_dir, f"wallpaper_{timestamp}.png")
 
     image.save(output_path)

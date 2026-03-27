@@ -108,7 +108,7 @@ if st.button("✨ Create Wallpaper", use_container_width=True):
         )
 
     # ---------- DISPLAY ----------
-    st.image(Image.open(path), width="stretch")
+    st.image(Image.open(path), use_container_width=True)
     st.markdown(f"💬 *{quote}*")
 
     # ---------- METADATA ----------
