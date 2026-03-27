@@ -37,11 +37,11 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
 
     # ---------- FONT SIZE ----------
     if len(quote) <= 25:
-        font_size = int(width * 0.08)
+        font_size = int(width * 0.12)
     elif len(quote) <= 60:
-        font_size = int(width * 0.07)
+        font_size = int(width * 0.11)
     else:
-        font_size = int(width * 0.06)
+        font_size = int(width * 0.09)
 
     # ---------- LOAD FONT (NO ERRORS) ----------
     try:
@@ -88,7 +88,7 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
             x = (width - text_width) // 2
 
             # shadow
-            draw.text((x + 2, y + 2), line, fill=(0, 0, 0), font=font)
+            draw.text((x + 3, y + 3), line, fill=(0, 0, 0), font=font)
 
             # main text
             draw.text((x, y), line, fill=(255, 255, 255), font=font)
