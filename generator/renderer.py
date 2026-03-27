@@ -37,11 +37,11 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
 
     # ---------- FONT SIZE ----------
     if len(quote) <= 25:
-        font_size = int(width * 0.12)
+        font_size = int(width * 0.30)
     elif len(quote) <= 60:
-        font_size = int(width * 0.11)
+        font_size = int(width * 0.25)
     else:
-        font_size = int(width * 0.09)
+        font_size = int(width * 0.24)
 
     # ---------- LOAD FONT (NO ERRORS) ----------
     try:
