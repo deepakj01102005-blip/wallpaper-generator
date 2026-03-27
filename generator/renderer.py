@@ -37,11 +37,11 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
 
     # ---------- FONT SIZE ----------
     if len(quote) <= 25:
-        font_size = int(width * 0.30)
+        font_size = int(width * 0.12)
     elif len(quote) <= 60:
-        font_size = int(width * 0.25)
+        font_size = int(width * 0.10)
     else:
-        font_size = int(width * 0.24)
+        font_size = int(width * 0.08)
 
     # ---------- LOAD FONT (NO ERRORS) ----------
     try:
@@ -63,7 +63,7 @@ def render_wallpaper(size, output_dir, quote, category, quote_style):
     if quote_style != "none":
 
         # wrap text properly
-        wrap_width = 25 if width < 1000 else 40
+        wrap_width = 15 if width < 1000 else 25
         wrapped_text = textwrap.fill(quote, width=wrap_width)
         lines = wrapped_text.split("\n")
 
